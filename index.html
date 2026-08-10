@@ -749,6 +749,7 @@
               >Contact email (optional)</label
             >
             <input type="email" id="email" name="email" />
+            <div class="error" id="err-email">Please enter a valid email address.</div>
           </fieldset>
 
           <button type="submit" class="submit-btn">Submit Testimonial</button>
@@ -882,7 +883,7 @@
           case "email": {
             const v = document.getElementById("email").value.trim();
             ok = validators.email(v);
-            // no dedicated error element for optional email
+            showError("email", !ok);
             break;
           }
         }
@@ -981,6 +982,13 @@
           showError("consent", true);
           valid = false;
         } else showError("consent", false);
+
+        // optional email: validate only when provided
+        const emailVal = document.getElementById("email").value.trim();
+        if (emailVal && !validators.email(emailVal)) {
+          showError("email", true);
+          valid = false;
+        } else showError("email", false);
 
         if (!valid) {
           document
@@ -1086,17 +1094,17 @@
     <script>
       (function () {
         try {
-          const img = document.querySelector('.logo-badge img');
+          const img = document.querySelector(".logo-badge img");
           if (!img) return;
           let link = document.querySelector("link[rel~='icon']");
           if (!link) {
-            link = document.createElement('link');
-            link.rel = 'icon';
+            link = document.createElement("link");
+            link.rel = "icon";
             document.head.appendChild(link);
           }
-          const src = img.src || '';
-          if (src.startsWith('data:image/')) {
-            link.type = src.split(';')[0].replace('data:', '');
+          const src = img.src || "";
+          if (src.startsWith("data:image/")) {
+            link.type = src.split(";")[0].replace("data:", "");
             link.href = src;
           } else {
             // fallback to referencing image path
